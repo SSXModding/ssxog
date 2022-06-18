@@ -1,0 +1,16 @@
+BasedOnStyle: WebKit
+
+# :( This is most of the style, tbh.
+BreakBeforeBraces: Allman
+DerivePointerAlignment: false
+PointerAlignment: Right
+
+TabWidth: 4
+IndentWidth: 4
+UseTab: Always
+
+AllowShortBlocksOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+Cpp11BracedListStyle: true
+PenaltyReturnTypeOnItsOwnLine: 500
