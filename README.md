@@ -11,7 +11,7 @@ The binary being used is the US game binary, original filename `SLUS_200.95`, ho
 ## Why not a matching decompilation?
 
 While this was briefly considered, the time it would take is far greater, let alone the fact that tooling for matching decompilations
-is nearly nonexistant and would have to be written from scratch specifically for this project.
+for the PS2 is nearly nonexistant and would have to be written from scratch specifically for this project.
 
 Later on, it might be worth considering again, however, for now, a functional decompilation will mean faster, more promising results.
 

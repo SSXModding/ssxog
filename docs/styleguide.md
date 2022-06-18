@@ -4,7 +4,7 @@ Most of the documentation here is enforced by [clang-format](https://clang.llvm.
 
 # Code Style
 
-## Indentation & Braces
+## Braces/Indentation
 
 Any block scopes should have the brace on the next line, like so:
 
@@ -25,7 +25,7 @@ catch(...)
 
 Tabs are used for indentation throughout the codebase.
 
-## Naming
+## Naming Rules
 
 ### Variables
 
@@ -45,6 +45,8 @@ For quick reference:
 | `sz`     | Null terminated string                         |
 | `fl`     | Float                                          |
 | `d`      | Double                                         |
+
+Enumerations or structures do not need special notations; naming of variables should be enough (pointers should only need `p`).
 
 Additionally, there are also the following special prefixes:
 
@@ -111,14 +113,14 @@ public:
 	// Morph
 	void Morph();
 
-	void NotImplemented(int &iOutput); // only for reference output
+	void ReferenceExample(int &iOutput); // only for reference output
 };
 
 // TODO: probably won't advocate for this unless
 // I have to since structs are types in C++
 typedef struct
 {
- int iNumber;
+	int iNumber;
 } tBxStructure;
 
 // example of a legacy function and type name
