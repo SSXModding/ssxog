@@ -2,7 +2,9 @@
 // will be replaced with real code later
 #include <stdio.h>
 
-int main()
+int main(int argc, char** argv)
 {
-	printf("Hello World!\n");
+	printf("meow\n");
+
+	void* a = nullptr;
 }

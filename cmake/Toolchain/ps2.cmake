@@ -13,20 +13,23 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
 # C/C++ compiler
 
-set(CMAKE_C_COMPILER ee-gcc)
-set(CMAKE_CXX_COMPILER ee-g++)
+set(CMAKE_C_COMPILER $ENV{SCE}/ee/gcc/bin/ee-gcc)
+set(CMAKE_CXX_COMPILER $ENV{SCE}/ee/gcc/bin/ee-g++)
 
 # We can't use the compiler generated dependency files,
 # since it adds flags GCC 2.9 doesn't understand.
-# While it understands -MD, it does not understand -MD or -MF,
-# which causes the build to fail.
+# While it understands -MD, it does not understand -MT or -MF,
+# which causes the actual build to end up failing.
+#
+# This option is only obeyed with the Makefile generator,
+# which is why Ninja cannot be used.
 set(CMAKE_DEPENDS_USE_COMPILER OFF)
 
-set(CMAKE_C_FLAGS_INIT "-I$ENV{SCE}/ee/include -I$ENV{SCE}/common/include -DPLATFORM_PS2 -DPS2_SONYSDK -fno-exceptions -fno-common")
+set(CMAKE_C_FLAGS_INIT "-I$ENV{SCE}/ee/include -I$ENV{SCE}/common/include -DBX_PLATFORM_PS2 -DBX_PS2_SONYSDK -fno-exceptions -fno-common")
 set(CMAKE_C_FLAGS_RELEASE_INIT "${CMAKE_C_FLAGS_INIT}")
 set(CMAKE_CXX_FLAGS_INIT "${CMAKE_C_FLAGS_INIT}")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "${CMAKE_C_FLAGS_RELEASE_INIT} ${CMAKE_CXX_FLAGS_INIT}")
-set(CMAKE_EXE_LINKER_FLAGS_INIT " -L$ENV{SCE}/ee/lib  -mno-crt0 -T $ENV{SCE}/ee/lib/app.cmd")
+set(CMAKE_EXE_LINKER_FLAGS_INIT " -L$ENV{SCE}/ee/lib -mno-crt0 -T $ENV{SCE}/ee/lib/app.cmd")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE_INIT "")
 
 

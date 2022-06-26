@@ -1,8 +1,4 @@
 add_executable(ssx
-	# TODO: seperate this into another target_sources(ssx) call later
-	$ENV{SCE}/ee/lib/crt0.s
-
-
 	main.cpp
 )
 
