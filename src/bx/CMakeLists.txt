@@ -12,6 +12,7 @@ target_link_libraries(ssx
 	#kernel
 
 	# Project libraries (by alias)
+	REAL::core
 )
 
 set_target_properties(ssx PROPERTIES

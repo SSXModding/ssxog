@@ -5,6 +5,4 @@
 int main(int argc, char** argv)
 {
 	printf("meow\n");
-
-	void* a = nullptr;
 }

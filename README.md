@@ -59,4 +59,4 @@ Note that the Ninja CMake generator does not work with the SCE SDK, and should n
 
 # Documentation
 
-[Style Guide](docs/styleguide.md)
+[Style Guide](docs/styleguide.md) - the style for the SSX codebase.

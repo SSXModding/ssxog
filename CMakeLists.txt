@@ -8,4 +8,6 @@ endif()
 include(${CMAKE_SOURCE_DIR}/cmake/Policies.cmake)
 project(ssxog LANGUAGES C CXX)
 
+
+add_subdirectory(src/libs)
 add_subdirectory(src/bx)
