@@ -9,6 +9,8 @@
 #define MB_LOW 0x00
 //....
 
+// Memory class functions. These allow initalization of memory
+
 char* MEM_alloc(const char* tag, size_t size, int flags);
 void MEM_free(void* ptr);
 
