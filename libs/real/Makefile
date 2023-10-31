@@ -10,6 +10,7 @@ VPATH := ps2
 
 # sources
 SRCS = timer.cpp \
+       mem.cpp \
        filesys.cpp \
 	   filedev.cpp
 

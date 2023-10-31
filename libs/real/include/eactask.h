@@ -18,8 +18,13 @@ typedef struct {
 typedef void(THREADPROC)();
 typedef void(THREAD2PROC)(void* param);
 
+int THREAD_init();
+
 int THREAD_create(THREADPROC* func, int ssize, int prio, int proc, THREAD* tstruct);
 int THREAD_createparam(THREAD2PROC* func, void* param, int ssize, int priority, int proc, THREAD* tstruct);
+
+int THREAD_iscurrent(THREAD* tstruct);
+
 
 #ifdef __cplusplus
 };

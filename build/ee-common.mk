@@ -26,5 +26,3 @@ endif
 
 CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -fno-exceptions
 
-#LDFLAGS :=-nostartfiles -T$(EE_ROOT)/lib/app.cmd -L$(EE_ROOT)/lib  $(LIBS)  $(LDFLAGS) 
-
