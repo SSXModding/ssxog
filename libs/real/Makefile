@@ -11,7 +11,8 @@ VPATH := ps2
 # sources
 SRCS = timer.cpp \
        mem.cpp \
+       thread.cpp \
        filesys.cpp \
-	   filedev.cpp
+	filedev.cpp
 
 include $(TOP)/build/core.mk
