@@ -1,3 +1,6 @@
 .idea/
 **/obj/
 /bin
+.cache/
+/compile_commands.json
+/events.json
