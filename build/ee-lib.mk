@@ -1,31 +1,18 @@
-FINALNAME=$(NAME)_$(CONFIG)
+include $(TOP)/build/ee-common.mk
 
-OBJECTS := $(patsubst %.c,obj/$(CONFIG)/%.o,$(filter %.c,$(SRCS)))
-OBJECTS += $(patsubst %.cpp,obj/$(CONFIG)/%.o,$(filter %.cpp,$(SRCS)))
-OBJECTS += $(patsubst %.s,obj/$(CONFIG)/%.o,$(filter %.s,$(SRCS)))
+OUTDIR := $(TOP)/bin/$(CONFIG)
 
-$(OBJDIR)/%.o: %.c
-	$(CC) -c $(CCFLAGS) $(INCS) $< -o $@
+$(OUTDIR)/lib$(NAME).a: $(OBJDIR)/ $(OUTDIR)/ $(OBJS)
+	$(AR) rv $@ $(OBJS)
 
-$(OBJDIR)/%.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCS) $< -o $@
-
-$(OBJDIR)/%.o: %.s
-	$(AS) -c $(ASFLAGS) $(INCS) $< -o $@
-
-.PHONY: all-pre
-
-all: all-pre $(BINDIR)/lib$(FINALNAME).a
-
-clean:
-	-rm $(BINDIR)/lib$(FINALNAME).a
-	-rm -rf obj
-
-$(BINDIR)/:
+$(OUTDIR)/:
 	mkdir -p $@
 
 $(OBJDIR)/:
 	mkdir -p $@
 
-$(BINDIR)/lib$(FINALNAME).a: $(OBJDIR)/ $(BINDIR)/ $(OBJECTS)
-	$(AR) rv $@ $(OBJECTS)
+# Phony target to clean products of this build type
+clean-products:
+	-rm $(OUTDIR)/lib$(NAME).a
+	-rm -rf obj
+

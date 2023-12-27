@@ -1,29 +1,55 @@
-# Common GNU Make rules (core entry file)
-
-# This makefile is expected to be included after the variables given
-# have been defined:
+# Core make entrypoint, used to unify/clean up rules
 #
-# NAME=name
-#
+# NAME=NAME
 # TARGET=ee|iop
-#
-# KIND=bin|lib|irx
-# `irx` is only valid if TARGET == `iop`
-#
-# SRCS=[... source-file-list]
-#
+# TARGETTYPE=bin|lib|irx
+# SRCS = sources...
 
+# TODO: Other configurations if possible
 debug_Valid := y
+#debugopt_Valid := y
 release_Valid := y
 
-ifneq ($($(CONFIG)_Valid),y)
-$(error Invalid configuration $(CONFIG) specified)
+# There's probably a slightly better detection heuristic
+# but this one seems to work more than well enough
+ifneq ($(OS),Windows_NT)
+WINE := y
+else
+WINE := n
 endif
 
-BINDIR = $(TOP)/bin
-OBJDIR = obj/$(CONFIG)
+# Check and set configuration
+ifeq ($(CONFIG),)
+CONFIG := debug
+endif
 
-# include target-specific recipies specifying how to 
-# build for the target.
-include $(TOP)/build/$(TARGET)-common.mk
-include $(TOP)/build/$(TARGET)-$(KIND).mk
+ifneq ($($(CONFIG)_Valid),y)
+$(error Invalid configuration)
+endif
+
+# Defines for debug condig
+ifeq ($(CONFIG),debug)
+CCDEFINES += -D__DEBUG
+endif
+
+# Moved here since it doesn't really have to be specified in the target common file.
+OBJDIR := obj/$(CONFIG)
+
+include $(TOP)/build/$(TARGET)-$(TARGETTYPE).mk
+
+# Make targets for allowing "only compile/only remove this object file" workflows
+# Useful for decompilation tooling that wants to use this.
+.PHONY: objonly objflush
+
+ifeq ($(COMPILEME),)
+# Running these targets without a object file to compile is a logic error.
+objonly:
+	$(error No object file provided, please set the COMPILEME variable to the object file you want to compile.)
+objflush:
+	$(error No object file provided)
+else
+objonly: $(OBJDIR)/ $(OBJDIR)/$(COMPILEME)
+	$(info $(OBJDIR)/$(COMPILEME))
+objflush:
+	$(RM) $(OBJDIR)/$(COMPILEME)
+endif

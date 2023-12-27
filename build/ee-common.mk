@@ -1,28 +1,56 @@
 # common EE toolchain stuff
 
 # EE toolchain root.
-EE_ROOT=$(SCE)/ee
-TC_ROOT=$(EE_ROOT)/gcc/bin
+SCE_EE=$(SCE)/ee
+EE_TC=$(SCE_EE)/gcc/bin
 
-CC=$(TC_ROOT)/ee-gcc
-AS=$(CC)
-CXX=$(TC_ROOT)/ee-g++
+CC=$(EE_TC)/ee-gcc
+AS=$(CC) -xassembler-with-cpp
+CXX=$(EE_TC)/ee-g++
 # for now...
 LD=$(CC)
-AR=$(TC_ROOT)/ee-ar
+AR=$(EE_TC)/ee-ar
 
-# Add base include directories
-CFLAGS := $(CFLAGS) -I$(SCE)/common/include -I$(SCE)/ee/include
+CRT0_S=$(SCE_EE)/lib/crt0.s
+
+# Scary Make Incantations: Volume 1
+OBJS := $(patsubst %.cpp,$(OBJDIR)/%.o,$(filter %.cpp,$(notdir $(SRCS))))
+OBJS += $(patsubst %.c,$(OBJDIR)/%.o,$(filter %.c,$(notdir $(SRCS))))
+OBJS += $(patsubst %.s,$(OBJDIR)/%.o,$(filter %.s,$(notdir $(SRCS))))
+
+# shared for both c/c++ compilation
+BASEFLAGS := -G0 -fno-common
+
+ifeq ($(CONFIG),debug)
+BASEFLAGS += -O2 -g
+endif
 
 ifeq ($(CONFIG),release)
-CFLAGS := $(CFLAGS) -G0 -O3 -Wall -Wextra -fno-common -fno-strict-aliasing
-ASFLAGS := -xassembler-with-cpp
+BASEFLAGS += -O2
+endif
+
+
+ifeq ($(CONFIG),release)
+CFLAGS := $(CFLAGS) $(BASEFLAGS) -G0 -O3 -Wall -Wextra -fno-common -fno-strict-aliasing
+CXXFLAGS := $(CXXFLAGS) $(BASEFLAGS) -G0 -O3 -Wall -Wextra -fno-common -fno-strict-aliasing -fno-exceptions
+ASFLAGS :=
 endif
 
 ifeq ($(CONFIG),debug)
-CFLAGS := $(CFLAGS) -G0 -O0 -g3 -Wall -Wextra -fno-common -fno-strict-aliasing
-ASFLAGS := -xassembler-with-cpp -g3
+CFLAGS := $(CFLAGS) $(BASEFLAGS) -G0 -O0 -g3 -Wall -Wextra -fno-common -fno-strict-aliasing
+CXXFLAGS := $(CXXFLAGS) $(BASEFLAGS) -G0 -O3 -g3 -Wall -Wextra -fno-common -fno-strict-aliasing -fno-exceptions
+ASFLAGS := -g3
 endif
 
-CXXFLAGS := $(CXXFLAGS) $(CFLAGS) -fno-exceptions
+# Add base include directories
+CFLAGS := $(CFLAGS) -I$(SCE)/common/include -I$(SCE)/ee/include $(INCS)
+CXXFLAGS := $(CXXFLAGS) -I$(SCE)/common/include -I$(SCE)/ee/include $(INCS)
 
+$(OBJDIR)/%.o: %.c
+	$(CC) -c $(CCFLAGS)  $< -o $@
+
+$(OBJDIR)/%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
+$(OBJDIR)/%.o: %.s
+	$(AS) -c $(ASFLAGS) $< -o $@

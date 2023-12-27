@@ -1,10 +1,8 @@
 NAME=real
 TARGET=ee
-KIND=lib
+TARGETTYPE=lib
 
-SELF := $(shell pwd)
-
-INCS = -I$(SELF)/include
+INCS = -I$(TOP)/libs/real/include
 
 VPATH := ps2
 
@@ -16,3 +14,9 @@ SRCS = timer.cpp \
 	filedev.cpp
 
 include $(TOP)/build/core.mk
+
+.PHONY: all clean clean-products
+
+all: $(BINDIR)/lib$(FINALNAME).a
+
+clean: clean-products

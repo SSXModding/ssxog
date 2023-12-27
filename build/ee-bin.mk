@@ -1,31 +1,29 @@
-FINALNAME=$(NAME)_$(CONFIG)
+include $(TOP)/build/ee-common.mk
 
-OBJECTS := $(patsubst %.c,obj/$(CONFIG)/%.o,$(filter %.c,$(SRCS)))
-OBJECTS += $(patsubst %.cpp,obj/$(CONFIG)/%.o,$(filter %.cpp,$(SRCS)))
-OBJECTS += $(patsubst %.s,obj/$(CONFIG)/%.o,$(filter %.s,$(SRCS)))
+FINALNAME=$(NAME).elf
 
-$(OBJDIR)/%.o: %.c
-	$(CC) -c $(CCFLAGS) $(INCS) $< -o $@
+# Default linker.
+ifeq ($(LD),)
+LD := $(CC)
+endif
 
-$(OBJDIR)/%.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCS) $< -o $@
+OBJS := $(OBJDIR)/crt0.o $(OBJS)
+OUTDIR := $(TOP)/bin/$(CONFIG)
 
-$(OBJDIR)/%.o: %.s
-	$(AS) -c $(ASFLAGS) $(INCS) $< -o $@
+# This incantation is done to avoid modifying the SCE linker scripts.
+$(OUTDIR)/$(FINALNAME): $(OBJDIR)/ $(OUTDIR)/ $(OBJS)
+	cd $(OBJDIR)/ && $(LD) $(CXXFLAGS) -o $@ $(notdir $(OBJS)) $(LDFLAGS)
 
-.PHONY: all-pre
-
-all: all-pre $(BINDIR)/$(FINALNAME).elf
-
-clean:
-	-rm $(BINDIR)/$(FINALNAME).elf
-	-rm -rf obj
-
-$(BINDIR)/:
-	mkdir -p $@
+# :( have to duplicate the rule
+$(OBJDIR)/crt0.o: $(CRT0_S)
+	$(CC) -c -xassembler-with-cpp $(CCFLAGS) $< -o $@
 
 $(OBJDIR)/:
 	mkdir -p $@
 
-$(BINDIR)/$(FINALNAME).elf: $(OBJDIR)/ $(BINDIR)/ $(OBJECTS)
-	$(LD)  $(LDFLAGS) $(LIBS) $(OBJECTS)   -o $@
+$(OUTDIR)/:
+	mkdir -p $@
+
+# Phony target to clean products of this build type
+clean-products:
+	$(RM) $(OBJS) $(OUTDIR)/$(FINALNAME)
