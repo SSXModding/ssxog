@@ -25,7 +25,7 @@ MUTEX MUTEX_alloc();
 void MUTEX_lock(MUTEX mutex);
 void MUTEX_unlock(MUTEX mutex);
 
-void THREAD_init(int unused);
+void THREAD_init();
 
 int THREAD_create(THREADPROC* func, int ssize, int prio, int proc, THREAD* tstruct);
 int THREAD_createparam(THREAD2PROC* func, void* param, int ssize, int priority, int proc, THREAD* tstruct);

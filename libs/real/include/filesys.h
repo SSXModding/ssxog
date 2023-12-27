@@ -4,9 +4,9 @@
 // the max size of a path
 #define FILESYS_MAXPATH 64
 
-
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 	/**
@@ -14,10 +14,8 @@ extern "C" {
 	 */
 	void FILESYS_getcurrentpath(char* out);
 
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

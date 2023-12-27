@@ -8,7 +8,7 @@ extern "C"
 	{
 	}
 
-	static void inittimer(int hz)
+	void inittimer(int hz)
 	{
 		if (!timerinitalized)
 		{
@@ -16,4 +16,5 @@ extern "C"
 				hz = 100;
 		}
 	}
+
 }

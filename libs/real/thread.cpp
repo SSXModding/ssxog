@@ -52,12 +52,10 @@ extern "C"
     // Threading
 
 
-	void THREAD_init(int unused)
+	void THREAD_init()
 	{
-        (void)unused;
-
         mainthread = GetThreadId();
-        ChangeThreadPriority(GetThreadId(), 100);
+        ChangeThreadPriority(mainthread, 100);
         videosema = MUTEX_alloc();
 	}
 }
